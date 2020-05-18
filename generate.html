@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UFT-8">
+    <title>SQL作成テスト</title>
+    <style>
+        .tag {
+            display: inline-block;
+            border: solid red 1px;
+        }
+
+        textarea {
+            width: 100%;
+            border: solid 1px;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+</head>
+
+<body>
+    <div>要素1</div>
+    <textarea type="text" id="input_src01">デフォルト値を入れることも可能</textarea><br />
+
+    <div>要素2</div>
+    <textarea type="text" id="input_src02"></textarea><br>
+
+    <div>要素3</div>
+    <textarea type="text" id="input_src03"></textarea><br>
+
+    <div>要素4</div>
+    <textarea type="text" id="input_src04"></textarea><br>
+
+    <div>要素5</div>
+    <textarea type="text" id="input_src05"></textarea><br>
+
+    <input type="submit" value="送信" onclick="empty_check();">
+    <hr>
+    <h3 style="width: 70%;display: inline-block;">結果：</h3>
+    <div style="display:inline-block;width:28%;text-align: right;">
+        <button
+            onclick="if(document.getElementById('result').style.display=='none'){document.getElementById('result').style.display='block'}else{document.getElementById('result').style.display='none'};">開閉</button>
+    </div>
+    <div id="result" style="display: block;">
+        <div>クエリ<button onclick="file_download('querys');">ダウンロード</button></div>
+        <div id="querys" style="border: double #000 1px;"></div>
+        <br>
+        <div>CSV<button onclick="file_download('csvs');">ダウンロード</button></div>
+        <div id="csvs" style="border: double #000 1px;"></div>
+    </div>
+    <br>
+    <hr>
+    <button onclick="reset();">削除</button>
+
+    <script>
+        // ローカルストレージに格納済みの内容取得
+        var query_box = JSON.parse(localStorage.getItem("query_box"));
+        var csv_box = JSON.parse(localStorage.getItem("csv_box"));
+        console.log(query_box);
+        // ローカルストレージが未定義（初使用）の際は配列として宣言(SQL形式用配列)
+        // 定義済みの場合は出力
+        if (!query_box) {
+            var query_box = {};
+        } else {
+            Object.keys(query_box).forEach(function (key) {
+                document.getElementById("querys").innerHTML += query_box[key] + "<br>";
+                console.log(query_box[key]);
+            });
+        }
+        // ローカルストレージが未定義（初使用）の際は配列として宣言(CSV形式用配列)
+        if (!csv_box) {
+            var csv_box = {};
+        } else {
+            Object.keys(csv_box).forEach(function (key) {
+                document.getElementById("csvs").innerHTML += csv_box[key] + "<br>";
+                console.log(csv_box[key]);
+            });
+        }
+
+        // 挿入用変数の定義
+        var input_date01 = "";
+        var input_date02 = "";
+        var input_date03 = "";
+        var input_date04 = "";
+        var input_date05 = "";
+
+        // 代入処理と入力漏れのチェック
+        function empty_check() {
+            input_date01 = document.getElementById("input_src01").value;
+            input_date02 = document.getElementById("input_src02").value;
+            input_date03 = document.getElementById("input_src03").value;
+            input_date04 = document.getElementById("input_src04").value;
+            input_date05 = document.getElementById("input_src05").value;
+            // 入力漏れがなかった場合は処理実施、あった場合はアラート表示
+            if (input_date01 && input_date02 && input_date03 && input_date04 && input_date05) { query_csv_add(); } else { alert("すべての項目に入力してください"); }
+        }
+
+        // クエリとcsvの追加処理
+        function query_csv_add() {
+
+            // クエリの定義
+            var query = "INSERT INTO listtable(date01,date02,date03,date04,date05)VALUES('" + input_date01 + "','" + input_date02 + "','" + input_date03 + "','" + input_date04 + "','" + input_date05 + "');";
+
+            // csvの定義
+            var csv = input_date01 + "," + input_date02 + "," + input_date03 + "," + input_date04 + "," + input_date05 + ",";
+
+            // CSVとSQL文の生成とローカルストレージへの書き込み実施
+            add_func("query", query);
+            add_func("csv", csv);
+
+            // 追加メッセージの表示
+            alert("追加しました");
+        }
+
+        // CSVとSQL文の生成とローカルストレージへの書き込み
+        function add_func(type, data) {
+            // 挿入番号の定義
+            if (eval(type + "_box")) {
+                // query_boxのプロパティを取得
+                var insert_num = Object.keys(eval(type + "_box")).map(function (data001) {
+                    return data001;
+                })
+                // 挿入番号の取得
+                insert_num = insert_num.length + 1;
+            } else {
+                // 挿入番号の指定(初回のみ)
+                insert_num = 1;
+            }
+
+            // ローカルストレージに書き込む配列の編集
+            eval(type + "_box")[insert_num] = data;
+            // ローカルストレージへの書き込みに使用する変数定義
+            var input_json = JSON.stringify(eval(type + "_box"));
+            var local_target = eval('"' + type + "_box" + '"');
+            // ローカルストレージへの書き込み
+            localStorage.setItem(local_target, input_json);
+            // デバック用コンソールログ（ローカルストレージの構造を確認する際はコメント解除）
+            // console.log(eval(type + "_box"));
+            // Object.keys(query_box).forEach(function (key) {
+            //     alert(query_box[key]);
+            // });
+
+            // 一覧表示の再読み込み
+            document.getElementById(eval("'" + type + "s" + "'")).innerHTML = "";
+            Object.keys(eval(type + "_box")).forEach(function (key) {
+                document.getElementById(eval("'" + type + "s" + "'")).innerHTML += eval(type + "_box")[key] + "<br>";
+            });
+
+
+            // 入力欄リセット
+            document.getElementById("input_src01").value = "";
+            document.getElementById("input_src02").value = "";
+            document.getElementById("input_src03").value = "";
+            document.getElementById("input_src04").value = "";
+            document.getElementById("input_src05").value = "";
+        }
+
+
+
+        function file_download(type) {
+
+            // ファイル名
+            var url = "testfile";
+
+            // ファイルの内容
+            var file_value = document.getElementById(type).innerHTML;
+            file_value = file_value.replace(/<br>/g, "\n");
+
+            // ファイルのダウンロード
+            var blob = new Blob([file_value], { type: "text/plan" });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = url + '.txt';
+            link.click();
+        }
+
+        function reset() {
+            var result = window.confirm('本当に削除しますか？');
+            if (result) {
+                localStorage.clear();
+                alert("すべての履歴を消去しました。");
+                // ローカルストレージに格納済みの内容取得
+                var query_box = JSON.parse(localStorage.getItem("query_box"));
+                var csv_box = JSON.parse(localStorage.getItem("csv_box"));
+                document.getElementById("querys").innerHTML = "";
+                document.getElementById("csvs").innerHTML = "";
+            }
+        }
+
+    </script>
+</body>
+
+</html>
+
+<!-- <div class="tag" onclick="document.getElementById('tag').value +=this.innerHTML+',';">記事</div> -->
