@@ -5,104 +5,264 @@
     <meta charset="UFT-8">
     <title>SQL作成テスト</title>
     <style>
-        .tag {
-            display: inline-block;
-            border: solid red 1px;
+        html {
+            background-color: rgb(53, 53, 53);
         }
 
+        #main {
+            max-width: 800px;
+            position: absolute;
+            right: 0;
+            left: 0;
+            margin: auto;
+            background-color: white;
+            box-sizing: border-box;
+            border: double #000 3px;
+        }
+
+        #menu_cont {
+            background-color: white;
+            color: rgb(29, 112, 160);
+            font-weight: bold;
+            text-align: center;
+            display: block;
+            width: calc((100% - 820px)/2);
+            position: fixed;
+            top: 100px;
+            right: 2px;
+        }
+
+        #menu_button {
+            position: absolute;
+            top: 15px;
+            bottom: 0;
+            right: 5%;
+            margin: auto;
+            z-index: 1000;
+            font-size: 22px;
+            display: none;
+        }
+
+
+        @media screen and (max-width:1024px) {
+            #menu_cont {
+                background-color: #444;
+                width: 100%;
+                height: 100%;
+                top: 40px;
+                display: none;
+            }
+
+            .menu {
+                border-top: solid 20px #FFF;
+                border-bottom: solid 20px #FFF;
+                background-color: white;
+            }
+
+            #menu_button {
+                display: block;
+            }
+        }
+
+
         textarea {
-            width: 100%;
+            width: 96%;
             border: solid 1px;
+            margin-left: 1%;
+        }
+
+        #tool_bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgb(248, 248, 248);
+            border-bottom: double 3px #000;
+            height: 40px;
+            width: 100vw;
+            font-weight: bold;
+            color: rgb(29, 112, 160);
+            z-index: 100;
+        }
+
+        /* 表示用 */
+        .s_div {
+            margin-left: 1%;
+            width: 95%;
+            border: double #000 1px;
+            text-align: right;
+        }
+
+        .print_div {
+            position: relative;
+            width: 100%;
+        }
+
+        .print_obj {
+            width: 86%;
+            /* display: inline-block; */
+            text-align: left;
+            word-wrap: break-word;
+            border-bottom: solid 1px #000;
+            padding-top: 7px;
+            padding-bottom: 7px;
+        }
+
+        .delete_button_cont {
+            display: inline-block;
+            border-radius: 5px;
+            vertical-align: middle;
+            font-size: 80%;
+            width: 7%;
+            height: 100%;
+            /* background-color: #CCC; */
+            color: rgb(0, 116, 161);
+            border: solid 3px rgb(0, 116, 161);
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            box-sizing: border-box;
+        }
+
+        .delete_button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 22px;
+            text-align: center;
         }
     </style>
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 </head>
 
 <body>
-    <div>要素1</div>
-    <textarea type="text" id="input_src01">デフォルト値を入れることも可能</textarea><br />
-
-    <div>要素2</div>
-    <textarea type="text" id="input_src02"></textarea><br>
-
-    <div>要素3</div>
-    <textarea type="text" id="input_src03"></textarea><br>
-
-    <div>要素4</div>
-    <textarea type="text" id="input_src04"></textarea><br>
-
-    <div>要素5</div>
-    <textarea type="text" id="input_src05"></textarea><br>
-
-    <input type="submit" value="送信" onclick="empty_check();">
-    <hr>
-    <h3 style="width: 70%;display: inline-block;">結果：</h3>
-    <div style="display:inline-block;width:28%;text-align: right;">
-        <button
-            onclick="if(document.getElementById('result').style.display=='none'){document.getElementById('result').style.display='block'}else{document.getElementById('result').style.display='none'};">開閉</button>
+    <div id="tool_bar" class="tool_bars">
+        <center style="position: relative;">
+            <div style="position: absolute; top:10px; bottom: 0; left:0; right:0; margin: auto;font-size: large;">データ入力
+            </div>
+            <i id="menu_button" class="fas fa-bars" onclick="open_change('menu_cont')"></i>
+        </center>
     </div>
-    <div id="result" style="display: block;">
-        <div>クエリ<button onclick="file_download('querys');">ダウンロード</button></div>
-        <div id="querys" style="border: double #000 1px;"></div>
+    <div style="height:35px;" class="tool_bars"></div>
+
+    <div id="main">
+        <div>要素1</div>
+        <textarea type="text" id="input_src01">デフォルト値を入れることも可能</textarea><br />
+
+        <div>要素2</div>
+        <textarea type="text" id="input_src02"></textarea><br>
+
+        <div>要素3</div>
+        <textarea type="text" id="input_src03"></textarea><br>
+
+        <div>要素4</div>
+        <textarea type="text" id="input_src04"></textarea><br>
+
+        <div>要素5</div>
+        <textarea type="text" id="input_src05"></textarea><br>
+
+        <input type="submit" value="送信" onclick="empty_check();">
+        <hr>
+        <h3 style="width: 70%;display: inline-block;">確認・編集：</h3>
+        <div style="display:inline-block;width:28%;text-align: right;">
+            <button onclick="open_change('result');">開閉</button>
+        </div>
+        <div id="result" style="display: block;">
+            <div>CSV</div>
+            <div id="csvs" class="s_div"></div>
+            <div>クエリ</div>
+            <div id="querys" class="s_div"></div>
+            <br>
+        </div>
         <br>
-        <div>CSV<button onclick="file_download('csvs');">ダウンロード</button></div>
-        <div id="csvs" style="border: double #000 1px;"></div>
+
     </div>
-    <br>
-    <hr>
-    <button onclick="reset();">削除</button>
+    <div id="menu_cont">
+        <hr>
+        <div class="menu" onclick="file_download('query');">SQL文ダウンロード <i class="fas fa-database"></i></div>
+        <hr>
+        <div class="menu" onclick="file_download('csv');">CSVダウンロード <i class="fas fa-file-csv"></i></div>
+        <hr>
+        <div class="menu" onclick="reset();">全削除 <i class="fas fa-trash-alt"></i></div>
+        <hr>
+    </div>
+
 
     <script>
         // ローカルストレージに格納済みの内容取得
-        var query_box = JSON.parse(localStorage.getItem("query_box"));
-        var csv_box = JSON.parse(localStorage.getItem("csv_box"));
-        console.log(query_box);
+        var query_box;
+        var csv_box;
+        function start_func() {
+            query_box = JSON.parse(localStorage.getItem("query_box"));
+            csv_box = JSON.parse(localStorage.getItem("csv_box"));
+            console.log(query_box);
+        }
+        start_func();
+
+
+        // データ一覧読み込み処理
+        function data_reload(reload_type) {
+            document.getElementById(eval("'" + reload_type + "s" + "'")).innerHTML = "";
+            var count = 1;
+            Object.keys(eval(reload_type + "_box")).forEach(function (key) {
+                // var add_object = eval(reload_type + "_box")[key];
+                var add_object = '<div class="print_div"><div class="print_obj" id="' + reload_type + '_obj_' + count + '">';
+                add_object += eval(reload_type + "_box")[key];
+                add_object += '</div>';
+
+                add_object += '<div class="delete_button_cont" style="right:6%;"><div class="delete_button" onclick="delete_obj(`' + count + '`,`' + reload_type + '`)"><i style="font-size:150%;" class="fas fa-trash-alt"></i></div></div>';
+                add_object += '<div class="delete_button_cont"><div class="delete_button" onclick="edit_obj(`' + count + '`,`' + reload_type + '`)"><i style="font-size:150%;" class="fas fa-pen"></i></div></div>';
+                // add_object += '<div class="delete_button_cont"></div></div>';
+                document.getElementById(eval("'" + reload_type + "s" + "'")).innerHTML += add_object;
+                count++;
+            });
+        }
+
+
         // ローカルストレージが未定義（初使用）の際は配列として宣言(SQL形式用配列)
         // 定義済みの場合は出力
         if (!query_box) {
             var query_box = {};
         } else {
-            Object.keys(query_box).forEach(function (key) {
-                document.getElementById("querys").innerHTML += query_box[key] + "<br>";
-                console.log(query_box[key]);
-            });
+            data_reload("query");
         }
         // ローカルストレージが未定義（初使用）の際は配列として宣言(CSV形式用配列)
         if (!csv_box) {
             var csv_box = {};
         } else {
-            Object.keys(csv_box).forEach(function (key) {
-                document.getElementById("csvs").innerHTML += csv_box[key] + "<br>";
-                console.log(csv_box[key]);
-            });
+            data_reload("csv");
         }
 
-        // 挿入用変数の定義
+        // 挿入用変数の定義(※変更可能箇所)
         var input_date01 = "";
         var input_date02 = "";
         var input_date03 = "";
         var input_date04 = "";
         var input_date05 = "";
 
-        // 代入処理と入力漏れのチェック
+        // 代入処理と入力漏れのチェック(※変更可能箇所)
         function empty_check() {
             input_date01 = document.getElementById("input_src01").value;
             input_date02 = document.getElementById("input_src02").value;
             input_date03 = document.getElementById("input_src03").value;
             input_date04 = document.getElementById("input_src04").value;
             input_date05 = document.getElementById("input_src05").value;
-            // 入力漏れがなかった場合は処理実施、あった場合はアラート表示
+            // 入力漏れがなかった場合は処理実施、あった場合はアラート表示(※変更可能箇所)
             if (input_date01 && input_date02 && input_date03 && input_date04 && input_date05) { query_csv_add(); } else { alert("すべての項目に入力してください"); }
         }
 
         // クエリとcsvの追加処理
         function query_csv_add() {
-
-            // クエリの定義
+            start_func();
+            // クエリの定義(※変更可能箇所)
             var query = "INSERT INTO listtable(date01,date02,date03,date04,date05)VALUES('" + input_date01 + "','" + input_date02 + "','" + input_date03 + "','" + input_date04 + "','" + input_date05 + "');";
 
-            // csvの定義
+            // csvの定義(※変更可能箇所)
             var csv = input_date01 + "," + input_date02 + "," + input_date03 + "," + input_date04 + "," + input_date05 + ",";
 
             // CSVとSQL文の生成とローカルストレージへの書き込み実施
@@ -115,9 +275,10 @@
 
         // CSVとSQL文の生成とローカルストレージへの書き込み
         function add_func(type, data) {
+
             // 挿入番号の定義
             if (eval(type + "_box")) {
-                // query_boxのプロパティを取得
+                // quer・csv_boxのプロパティを取得
                 var insert_num = Object.keys(eval(type + "_box")).map(function (data001) {
                     return data001;
                 })
@@ -143,9 +304,7 @@
 
             // 一覧表示の再読み込み
             document.getElementById(eval("'" + type + "s" + "'")).innerHTML = "";
-            Object.keys(eval(type + "_box")).forEach(function (key) {
-                document.getElementById(eval("'" + type + "s" + "'")).innerHTML += eval(type + "_box")[key] + "<br>";
-            });
+            data_reload(type);
 
 
             // 入力欄リセット
@@ -159,13 +318,15 @@
 
 
         function file_download(type) {
-
             // ファイル名
-            var url = "testfile";
+            var url ="File_name";
 
             // ファイルの内容
-            var file_value = document.getElementById(type).innerHTML;
-            file_value = file_value.replace(/<br>/g, "\n");
+            var file_value = "";
+
+            Object.keys(eval(type + "_box")).forEach(function (key) {
+                file_value += eval(type + "_box")[key] + "\n";
+            });
 
             // ファイルのダウンロード
             var blob = new Blob([file_value], { type: "text/plan" });
@@ -181,16 +342,81 @@
                 localStorage.clear();
                 alert("すべての履歴を消去しました。");
                 // ローカルストレージに格納済みの内容取得
-                var query_box = JSON.parse(localStorage.getItem("query_box"));
-                var csv_box = JSON.parse(localStorage.getItem("csv_box"));
+                query_box = {};
+                csv_box = {};
                 document.getElementById("querys").innerHTML = "";
                 document.getElementById("csvs").innerHTML = "";
             }
         }
 
+        // 編集中
+        function edit_obj(edit_target, edit_type) {
+            var edit_value = eval(edit_type + "_box")[edit_target];
+            //入力フォームを表示する処理
+            //フォームに値を入れる処理
+            //送信ボタン→ターゲットの値更新
+            //ローカルストレージに書き込み
+            alert(edit_target + "delete_targetを削除しました。");
+        }
+
+        function delete_obj(delete_target, delete_type) {
+            var result = window.confirm('本当に削除しますか？');
+            if (result) {
+
+                delete eval(delete_type + "_box")[delete_target];
+                var tmp_box = eval(delete_type + "_box");
+                var target_box = "";
+                if (delete_type == "query") { target_box = query_box; } else { target_box = csv_box; }
+                var tmp_box = {};
+                var count = "1";
+
+
+                Object.keys(target_box).forEach(function (key) {
+                    if (target_box[key]) {
+                        tmp_box[count] = target_box[key];
+                    }
+                    count++;
+                })
+                alert(delete_target + "delete_targetを削除しました。");
+                delete_obj2(delete_type, tmp_box);
+            }
+        }
+
+        function delete_obj2(delete_type, tmp_box) {
+            // ローカルストレージへの書き込みに使用する変数定義
+            var input_json = JSON.stringify(tmp_box);
+            var local_target = eval('"' + delete_type + "_box" + '"');
+            // ローカルストレージへの書き込み
+            localStorage.setItem(eval('"' + delete_type + "_box" + '"'), input_json);
+            data_reload(delete_type);
+        }
+
+        function open_change(this_var) {
+            // console.log(this_var);
+            if (document.getElementById(this_var).style.display == 'none') {
+                document.getElementById(this_var).style.display = 'block'
+                console.log(this_var);
+            } else if (document.getElementById(this_var).style.display == 'block') {
+                document.getElementById(this_var).style.display = 'none'
+            } else {
+                document.getElementById(this_var).style.display = 'block'
+            };
+        };
     </script>
 </body>
 
 </html>
 
-<!-- <div class="tag" onclick="document.getElementById('tag').value +=this.innerHTML+',';">記事</div> -->
+
+<!-- 
+0519 
+リセット時に変数boxが初期化されない不具合修正
+出力結果の再読み込み処理を関数化
+-->
+
+<!-- 
+0520
+個別削除機能追加
+ローカルストレージの取得を関数化
+デザイン変更
+ -->
