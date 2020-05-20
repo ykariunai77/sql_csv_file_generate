@@ -42,6 +42,19 @@
             font-size: 22px;
             display: none;
         }
+        .tool_button{
+            background-color: white;
+            color: rgb(29, 112, 160);
+            border: solid 3px rgb(0, 116, 161);
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+            display: block;
+            margin-left: auto;
+            right: 8px;
+            width: 80px;
+            border-radius: 5px;
+        }
 
 
         @media screen and (max-width:1024px) {
@@ -166,12 +179,13 @@
         <div>要素5</div>
         <textarea type="text" id="input_src05"></textarea><br>
 
-        <input type="submit" value="送信" onclick="empty_check();">
+        <div class="tool_button" onclick="empty_check();"><i class="far fa-plus-square"></i> 追加</div>
         <hr>
         <h3 style="width: 70%;display: inline-block;">確認・編集：</h3>
         <div style="display:inline-block;width:28%;text-align: right;">
-            <button onclick="open_change('result');">開閉</button>
+            <div class="tool_button"  onclick="open_change('result');"><i class="fas fa-chevron-down"></i>開閉</div>
         </div>
+        <hr>
         <div id="result" style="display: block;">
             <div>CSV</div>
             <div id="csvs" class="s_div"></div>
@@ -195,14 +209,30 @@
 
     <script>
         // ローカルストレージに格納済みの内容取得
-        var query_box;
-        var csv_box;
+        var query_box = "";
+        var csv_box = "";
         function start_func() {
             query_box = JSON.parse(localStorage.getItem("query_box"));
             csv_box = JSON.parse(localStorage.getItem("csv_box"));
             console.log(query_box);
+            // ローカルストレージが未定義（初使用）の際は配列として宣言(SQL形式用配列)
+            // 定義済みの場合は出力
+            if (!query_box) {
+                query_box = {};
+                console.log(query_box);
+            } else {
+                data_reload("query");
+            }
+            // ローカルストレージが未定義（初使用）の際は配列として宣言(CSV形式用配列)
+            if (!csv_box) {
+                csv_box = {};
+            } else {
+                data_reload("csv");
+            }
         }
         start_func();
+
+
 
 
         // データ一覧読み込み処理
@@ -221,21 +251,6 @@
                 document.getElementById(eval("'" + reload_type + "s" + "'")).innerHTML += add_object;
                 count++;
             });
-        }
-
-
-        // ローカルストレージが未定義（初使用）の際は配列として宣言(SQL形式用配列)
-        // 定義済みの場合は出力
-        if (!query_box) {
-            var query_box = {};
-        } else {
-            data_reload("query");
-        }
-        // ローカルストレージが未定義（初使用）の際は配列として宣言(CSV形式用配列)
-        if (!csv_box) {
-            var csv_box = {};
-        } else {
-            data_reload("csv");
         }
 
         // 挿入用変数の定義(※変更可能箇所)
@@ -288,7 +303,7 @@
                 // 挿入番号の指定(初回のみ)
                 insert_num = 1;
             }
-
+            console.log(eval(type + "_box"));
             // ローカルストレージに書き込む配列の編集
             eval(type + "_box")[insert_num] = data;
             // ローカルストレージへの書き込みに使用する変数定義
@@ -307,7 +322,7 @@
             data_reload(type);
 
 
-            // 入力欄リセット
+            // 入力欄リセット(※変更可能箇所)
             document.getElementById("input_src01").value = "";
             document.getElementById("input_src02").value = "";
             document.getElementById("input_src03").value = "";
@@ -319,7 +334,7 @@
 
         function file_download(type) {
             // ファイル名
-            var url ="File_name";
+            var url = "ファイル名";
 
             // ファイルの内容
             var file_value = "";
