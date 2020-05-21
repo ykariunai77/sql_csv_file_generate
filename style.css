@@ -1,0 +1,265 @@
+html {
+    background-color: rgb(53, 53, 53);
+    color: rgb(29, 112, 160);
+
+}
+
+#main {
+    max-width: 800px;
+    position: absolute;
+    right: 0;
+    left: 0;
+    margin: auto;
+    background-color: white;
+    box-sizing: border-box;
+    border: double #000 3px;
+}
+#ocr_cont {
+    background-color:whitesmoke;
+    height: 40vh;
+    color: rgb(29, 112, 160);
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+    border: double 1px rgb(29, 112, 160);
+    font-weight: bold;
+    position: fixed;
+    display: none;
+    position: fixed;
+    bottom: 0;
+    overflow: scroll;
+    z-index: 10000;
+}
+
+#menu_cont {
+    background-color: white;
+    color: rgb(29, 112, 160);
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    width: calc((100% - 820px)/2);
+    position: fixed;
+    top: 100px;
+    right: 2px;
+}
+
+#edit_cont {
+    background-color: white;
+    color: rgb(29, 112, 160);
+    font-weight: bold;
+    text-align: center;
+    display: none;
+    width: calc((100% - 820px)/2);
+    position: fixed;
+    top: 100px;
+    right: 2px;
+}
+
+
+
+#menu_button {
+    position: absolute;
+    top: 15px;
+    bottom: 0;
+    right: 5%;
+    margin: auto;
+    z-index: 1000;
+    font-size: 22px;
+    display: none;
+}
+
+.tool_button {
+    background-color: white;
+    color: rgb(29, 112, 160);
+    border: solid 3px rgb(0, 116, 161);
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    display: block;
+    margin-left: auto;
+    right: 8px;
+    width: 80px;
+    border-radius: 5px;
+}
+
+#edit_cancel {
+    position: relative;
+    right: 8px;
+    width: 150px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+
+@media screen and (max-width:1024px) {
+    #menu_cont {
+        background-color: #444;
+        width: 100%;
+        height: 100%;
+        top: 40px;
+        display: none;
+    }
+
+    #edit_cont {
+        background-color: #444;
+        width: 100%;
+        height: 100%;
+        top: 40px;
+        display: none;
+    }
+
+    .menu {
+        border-top: solid 20px #FFF;
+        border-bottom: solid 20px #FFF;
+        background-color: white;
+    }
+
+    #menu_button {
+        display: block;
+    }
+}
+
+
+textarea {
+    width: 96%;
+    border: solid 1px;
+    margin-left: 1%;
+}
+
+#tool_bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgb(248, 248, 248);
+    border-bottom: double 3px #000;
+    height: 40px;
+    width: 100vw;
+    font-weight: bold;
+    color: rgb(29, 112, 160);
+    z-index: 100;
+}
+
+/* 表示用 */
+.s_div {
+    margin-left: 1%;
+    width: 95%;
+    border: double #000 1px;
+    text-align: right;
+}
+
+.print_div {
+    position: relative;
+    width: 100%;
+}
+
+.print_obj {
+    width: 86%;
+    /* display: inline-block; */
+    text-align: left;
+    word-wrap: break-word;
+    border-bottom: solid 1px #000;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.delete_button_cont {
+    display: inline-block;
+    border-radius: 5px;
+    vertical-align: middle;
+    font-size: 80%;
+    width: 7%;
+    height: 100%;
+    /* background-color: #CCC; */
+    color: rgb(0, 116, 161);
+    border: solid 3px rgb(0, 116, 161);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.delete_button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 22px;
+    text-align: center;
+}
+
+
+.print_anime01{
+    animation: print_animation01 linear 0.5s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+  }
+  
+  @keyframes print_animation01{
+    0% {
+      opacity:0;
+      transform:  translate(0px,-100px)  ;
+    }
+    100% {
+      opacity:1;
+      transform:  translate(0px,0px)  ;
+    }
+  }
+
+  .print_anime02{
+    animation: print_animation02 linear 0.4s;
+    animation-iteration-count: 1;
+    transform-origin: 0% 100%;
+  }
+  
+  @keyframes print_animation02{
+    0% {
+      transform:  translate(-100%,0px)  ;
+    }
+    100% {
+      transform:  translate(0px,0px)  ;
+    }
+  }
+
+  #ocr_sync_cont{
+    display: none;
+    position: absolute;
+    margin: auto;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: whitesmoke;
+    border: double 5px #000;
+    text-align: center;
+    max-width: 800px;
+    width: 300px;
+    height: 300px;
+    z-index: 900000;
+    display: none;
+
+
+}
+  
+  .ocr_text{
+      border: 1px solid blue;
+      color: blue;
+      display: inline-block;
+      padding: 5px;
+      margin: 5px;
+  }
+
+
+  #sync_icon{
+    font-size: 150px;
+    animation:3s linear infinite rotation;
+    margin-top:50px;
+
+  }
+
+  @keyframes rotation{
+    0%{ transform:rotate(0);}
+    100%{ transform:rotate(360deg); }
+  }

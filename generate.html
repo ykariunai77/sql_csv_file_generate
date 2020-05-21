@@ -2,154 +2,14 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UFT-8">
+    <meta name="robots" content="noindex">
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>SQL作成テスト</title>
-    <style>
-        html {
-            background-color: rgb(53, 53, 53);
-        }
-
-        #main {
-            max-width: 800px;
-            position: absolute;
-            right: 0;
-            left: 0;
-            margin: auto;
-            background-color: white;
-            box-sizing: border-box;
-            border: double #000 3px;
-        }
-
-        #menu_cont {
-            background-color: white;
-            color: rgb(29, 112, 160);
-            font-weight: bold;
-            text-align: center;
-            display: block;
-            width: calc((100% - 820px)/2);
-            position: fixed;
-            top: 100px;
-            right: 2px;
-        }
-
-        #menu_button {
-            position: absolute;
-            top: 15px;
-            bottom: 0;
-            right: 5%;
-            margin: auto;
-            z-index: 1000;
-            font-size: 22px;
-            display: none;
-        }
-        .tool_button{
-            background-color: white;
-            color: rgb(29, 112, 160);
-            border: solid 3px rgb(0, 116, 161);
-            font-weight: bold;
-            text-align: center;
-            position: relative;
-            display: block;
-            margin-left: auto;
-            right: 8px;
-            width: 80px;
-            border-radius: 5px;
-        }
-
-
-        @media screen and (max-width:1024px) {
-            #menu_cont {
-                background-color: #444;
-                width: 100%;
-                height: 100%;
-                top: 40px;
-                display: none;
-            }
-
-            .menu {
-                border-top: solid 20px #FFF;
-                border-bottom: solid 20px #FFF;
-                background-color: white;
-            }
-
-            #menu_button {
-                display: block;
-            }
-        }
-
-
-        textarea {
-            width: 96%;
-            border: solid 1px;
-            margin-left: 1%;
-        }
-
-        #tool_bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: rgb(248, 248, 248);
-            border-bottom: double 3px #000;
-            height: 40px;
-            width: 100vw;
-            font-weight: bold;
-            color: rgb(29, 112, 160);
-            z-index: 100;
-        }
-
-        /* 表示用 */
-        .s_div {
-            margin-left: 1%;
-            width: 95%;
-            border: double #000 1px;
-            text-align: right;
-        }
-
-        .print_div {
-            position: relative;
-            width: 100%;
-        }
-
-        .print_obj {
-            width: 86%;
-            /* display: inline-block; */
-            text-align: left;
-            word-wrap: break-word;
-            border-bottom: solid 1px #000;
-            padding-top: 7px;
-            padding-bottom: 7px;
-        }
-
-        .delete_button_cont {
-            display: inline-block;
-            border-radius: 5px;
-            vertical-align: middle;
-            font-size: 80%;
-            width: 7%;
-            height: 100%;
-            /* background-color: #CCC; */
-            color: rgb(0, 116, 161);
-            border: solid 3px rgb(0, 116, 161);
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            margin: auto;
-            box-sizing: border-box;
-        }
-
-        .delete_button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-            width: 22px;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="./style.css">
     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.7/dist/tesseract.js'></script>
 
 </head>
 
@@ -164,8 +24,9 @@
     <div style="height:35px;" class="tool_bars"></div>
 
     <div id="main">
+        <!-- ※ 変更可能箇所1 ここから -->
         <div>要素1</div>
-        <textarea type="text" id="input_src01">デフォルト値を入れることも可能</textarea><br />
+        <textarea type="text" id="input_src01"></textarea><br>
 
         <div>要素2</div>
         <textarea type="text" id="input_src02"></textarea><br>
@@ -178,12 +39,13 @@
 
         <div>要素5</div>
         <textarea type="text" id="input_src05"></textarea><br>
+        <!-- ※ 変更可能箇所1 ここまで -->
 
-        <div class="tool_button" onclick="empty_check();"><i class="far fa-plus-square"></i> 追加</div>
+        <button class="tool_button" onclick="empty_check();"><i class="far fa-plus-square"></i> 追加</button>
         <hr>
         <h3 style="width: 70%;display: inline-block;">確認・編集：</h3>
         <div style="display:inline-block;width:28%;text-align: right;">
-            <div class="tool_button"  onclick="open_change('result');"><i class="fas fa-chevron-down"></i>開閉</div>
+            <button class="tool_button" onclick="open_change('result');"><i class="fas fa-chevron-down"></i> 開閉</button>
         </div>
         <hr>
         <div id="result" style="display: block;">
@@ -194,16 +56,72 @@
             <br>
         </div>
         <br>
-
+        <div id="ocr_cont" class="print_anime02">
+            <button class="tool_button" onclick="open_change('ocr_cont');" style="margin-left:10px;"><i
+                    class="fas fa-chevron-down"></i> 閉じる</button>
+            <input class="tool_button" type="file" accept="image/*" capture="camera" id="camera"></input>
+            <!-- https://developers.google.com/web/fundamentals/media/capturing-images?hl=ja -->
+            <form name="form1">
+                <p>読み取り言語
+                    <select name="select_language">
+                        <option value="jpn">日本語</option>
+                        <option value="eng">英語</option>
+                    </select>
+                </p>
+                <p>挿入先
+                    <select name="select_insert">
+                        <option value="1">要素1</option>
+                        <option value="2">要素2</option>
+                        <option value="3">要素3</option>
+                        <option value="4">要素4</option>
+                    </select>
+                </p>
+            </form>
+            <div>挿入値<textarea type="text" id="ocr_input_box" style="width: 70%;">ここに値が</textarea>
+                <button onclick="ocr_insert();">挿入</button></div>
+            <div id="ocr_text_print"></div>
+        </div>
     </div>
     <div id="menu_cont">
-        <hr>
-        <div class="menu" onclick="file_download('query');">SQL文ダウンロード <i class="fas fa-database"></i></div>
-        <hr>
-        <div class="menu" onclick="file_download('csv');">CSVダウンロード <i class="fas fa-file-csv"></i></div>
-        <hr>
-        <div class="menu" onclick="reset();">全削除 <i class="fas fa-trash-alt"></i></div>
-        <hr>
+        <div class="print_anime01">
+            <hr>
+            <div class="menu" onclick="file_download('query');"><i class="fas fa-database"></i> SQL文ダウンロード</div>
+            <hr>
+            <div class="menu" onclick="file_download('csv');"><i class="fas fa-file-csv"></i> CSVダウンロード</div>
+            <hr>
+            <div class="menu" onclick="ocr_click();"><i class="fas fa-camera"></i> OCR機能</div>
+            <hr>
+            <div class="menu" onclick="reset();"><i class="fas fa-trash-alt"></i> 全削除</div>
+            <hr>
+        </div>
+    </div>
+
+    <div id="edit_cont">
+        <div style="background-color: white; text-align: left;" class="print_anime01">
+            <!-- ※ 変更可能箇所2 ここから -->
+            <h3>値の変更</h3>
+            <div>要素1</div>
+            <textarea type="text" id="edit_src1"></textarea><br>
+            <div>要素2</div>
+            <textarea type="text" id="edit_src2"></textarea><br>
+            <div>要素3</div>
+            <textarea type="text" id="edit_src3"></textarea><br>
+            <div>要素4</div>
+            <textarea type="text" id="edit_src4"></textarea><br>
+            <div>要素5</div>
+            <textarea type="text" id="edit_src5"></textarea><br>
+            <!-- ※ 変更可能箇所2 ここまで -->
+            <button class="tool_button" id="edit_push"><i class="fas fa-pen"></i> 編集</button>
+            <div class="tool_button" id="edit_cancel" onclick="open_change('edit_cont');"><i
+                    class="far fa-window-close"></i> キャンセル</div>
+            <hr>
+        </div>
+
+    </div>
+
+    <div id="ocr_sync_cont" style="display: none;">
+        <i class="fas fa-sync" id="sync_icon"></i><br>
+        <div style="position: absolute; bottom: 10px; right:0;left:0;margin: auto;">解析しています...</div>
     </div>
 
 
@@ -253,32 +171,50 @@
             });
         }
 
-        // 挿入用変数の定義(※変更可能箇所)
+        // 挿入用変数の定義
+        // ※ 変更可能箇所3ここから
         var input_date01 = "";
         var input_date02 = "";
         var input_date03 = "";
         var input_date04 = "";
         var input_date05 = "";
+        // ※ 変更可能箇所3ここまで
 
-        // 代入処理と入力漏れのチェック(※変更可能箇所)
+        // 代入処理と入力漏れのチェック
+        // ※変更可能箇所4 ここから
         function empty_check() {
             input_date01 = document.getElementById("input_src01").value;
             input_date02 = document.getElementById("input_src02").value;
             input_date03 = document.getElementById("input_src03").value;
             input_date04 = document.getElementById("input_src04").value;
             input_date05 = document.getElementById("input_src05").value;
-            // 入力漏れがなかった場合は処理実施、あった場合はアラート表示(※変更可能箇所)
-            if (input_date01 && input_date02 && input_date03 && input_date04 && input_date05) { query_csv_add(); } else { alert("すべての項目に入力してください"); }
+            // ※変更可能箇所4 ここまで
+
+            // 入力漏れがなかった場合は処理実施、あった場合はアラート表示
+            // ※変更可能箇所5 ここから
+            if (input_date01 && input_date02 && input_date03 && input_date04 && input_date05) {
+                input_date01 = input_date01.replace(/,/g, '，');
+                input_date02 = input_date02.replace(/,/g, '，');
+                input_date03 = input_date03.replace(/,/g, '，');
+                input_date04 = input_date04.replace(/,/g, '，');
+                input_date05 = input_date05.replace(/,/g, '，');
+                query_csv_add();
+            } else {
+                alert("すべての項目に入力してください");
+            }
+            // ※変更可能箇所5 ここまで
         }
 
         // クエリとcsvの追加処理
         function query_csv_add() {
             start_func();
-            // クエリの定義(※変更可能箇所)
+            // ※変更可能箇所6 ここから
+            // クエリの定義
             var query = "INSERT INTO listtable(date01,date02,date03,date04,date05)VALUES('" + input_date01 + "','" + input_date02 + "','" + input_date03 + "','" + input_date04 + "','" + input_date05 + "');";
-
-            // csvの定義(※変更可能箇所)
+            // csvの定義
             var csv = input_date01 + "," + input_date02 + "," + input_date03 + "," + input_date04 + "," + input_date05 + ",";
+            // ※変更可能箇所6 ここまで
+
 
             // CSVとSQL文の生成とローカルストレージへの書き込み実施
             add_func("query", query);
@@ -322,19 +258,37 @@
             data_reload(type);
 
 
-            // 入力欄リセット(※変更可能箇所)
+            // 入力欄リセット
+            // ※変更可能箇所7 ここから
             document.getElementById("input_src01").value = "";
             document.getElementById("input_src02").value = "";
             document.getElementById("input_src03").value = "";
             document.getElementById("input_src04").value = "";
             document.getElementById("input_src05").value = "";
+            // ※変更可能箇所7 ここまで
         }
 
 
 
         function file_download(type) {
-            // ファイル名
-            var url = "ファイル名";
+
+            // 日付のフォーマット定義
+            dateFormat = {
+                _fmt: {
+                    "yyyy": function (date) { return date.getFullYear() + ''; },
+                    "MM": function (date) { return ('0' + (date.getMonth() + 1)).slice(-2); },
+                    "dd": function (date) { return ('0' + date.getDate()).slice(-2); },
+                    "hh": function (date) { return ('0' + date.getHours()).slice(-2); },
+                    "mm": function (date) { return ('0' + date.getMinutes()).slice(-2); },
+                    "ss": function (date) { return ('0' + date.getSeconds()).slice(-2); }
+                },
+                _priority: ["yyyy", "MM", "dd", "hh", "mm", "ss"],
+                format: function (date, format) {
+                    return this._priority.reduce((res, fmt) => res.replace(fmt, this._fmt[fmt](date)), format)
+                }
+            };
+            // ファイル名に使用する日付
+            var url = dateFormat.format(new Date(), 'yyyyMMddhhmmss');
 
             // ファイルの内容
             var file_value = "";
@@ -364,37 +318,106 @@
             }
         }
 
-        // 編集中
+        // 編集
         function edit_obj(edit_target, edit_type) {
+
             var edit_value = eval(edit_type + "_box")[edit_target];
+
             //入力フォームを表示する処理
+            open_change('edit_cont');
+
             //フォームに値を入れる処理
-            //送信ボタン→ターゲットの値更新
-            //ローカルストレージに書き込み
-            alert(edit_target + "delete_targetを削除しました。");
+            var tmp = csv_box[edit_target].split(',');
+            for (var i = 1; i < tmp.length; ++i) {
+                document.getElementById("edit_src" + i).innerHTML = tmp[i - 1];
+            }
+            document.getElementById("edit_push").onclick = function () { edit_obj2(edit_target, edit_type) };
         }
+
+        //送信ボタン→ターゲットの値更新
+        //ローカルストレージに書き込み
+        // ※ 変更可能箇所8 ここから
+        function edit_obj2(edit_target, edit_type) {
+            var data;
+            var edit_date01 = document.getElementById("edit_src1").value;
+            var edit_date02 = document.getElementById("edit_src2").value;
+            var edit_date03 = document.getElementById("edit_src3").value;
+            var edit_date04 = document.getElementById("edit_src4").value;
+            var edit_date05 = document.getElementById("edit_src5").value;
+            // ※ 変更可能箇所8 ここまで
+
+            // ※ 変更可能箇所9 ここから
+            // 入力漏れがなかった場合は処理実施、あった場合はアラート表示(※変更可能箇所)
+            if (edit_date01 && edit_date02 && edit_date03 && edit_date04 && edit_date05) {
+                data1 = "INSERT INTO listtable(date01,date02,date03,date04,date05)VALUES('" + edit_date01 + "','" + edit_date02 + "','" + edit_date03 + "','" + edit_date04 + "','" + edit_date05 + "');";
+                data2 = edit_date01 + "," + edit_date02 + "," + edit_date03 + "," + edit_date04 + "," + edit_date05 + ",";
+                // ※ 変更可能箇所9 ここまで
+
+                // csvの定義
+                query_box[edit_target] = data1;
+                csv_box[edit_target] = data2;
+
+                // ローカルストレージへの書き込みに使用する変数定義
+                var input_json1 = JSON.stringify(query_box);
+                var local_target1 = "query_box";
+                var input_json2 = JSON.stringify(csv_box);
+                var local_target2 = "csv_box";
+                // ローカルストレージへの書き込み
+                alert("変更しました");
+                localStorage.setItem(local_target1, input_json1);
+                localStorage.setItem(local_target2, input_json2);
+                data_reload("csv");
+                data_reload("query");
+                open_change("edit_cont");
+            } else {
+                alert("すべての項目に入力してください");
+            }
+
+        }
+
+
+
 
         function delete_obj(delete_target, delete_type) {
             var result = window.confirm('本当に削除しますか？');
             if (result) {
+                delete query_box[delete_target];
+                var tmp_box1 = query_box;
+                var target_box1 = "";
+                target_box1 = query_box;
+                var tmp_box1 = {};
+                var count1 = "1";
 
-                delete eval(delete_type + "_box")[delete_target];
-                var tmp_box = eval(delete_type + "_box");
-                var target_box = "";
-                if (delete_type == "query") { target_box = query_box; } else { target_box = csv_box; }
-                var tmp_box = {};
-                var count = "1";
 
-
-                Object.keys(target_box).forEach(function (key) {
-                    if (target_box[key]) {
-                        tmp_box[count] = target_box[key];
+                Object.keys(target_box1).forEach(function (key) {
+                    if (target_box1[key]) {
+                        tmp_box1[count1] = target_box1[key];
                     }
-                    count++;
+                    count1++;
                 })
                 alert(delete_target + "delete_targetを削除しました。");
-                delete_obj2(delete_type, tmp_box);
+                delete_obj2("query", tmp_box1);
+
+                // ###$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+                delete csv_box[delete_target];
+                var tmp_box2 = csv_box;
+                var target_box2 = "";
+                target_box2 = csv_box;
+                var tmp_box2 = {};
+                var count2 = "1";
+
+
+                Object.keys(target_box2).forEach(function (key) {
+                    if (target_box2[key]) {
+                        tmp_box2[count2] = target_box2[key];
+                    }
+                    count2++;
+                })
+                delete_obj2("csv", tmp_box2);
+                start_func();
             }
+
         }
 
         function delete_obj2(delete_type, tmp_box) {
@@ -408,6 +431,8 @@
 
         function open_change(this_var) {
             // console.log(this_var);
+            // alert(this_var);
+
             if (document.getElementById(this_var).style.display == 'none') {
                 document.getElementById(this_var).style.display = 'block'
                 console.log(this_var);
@@ -417,6 +442,71 @@
                 document.getElementById(this_var).style.display = 'block'
             };
         };
+
+        camera.addEventListener('change', function (e) {
+            var file = e.target.files[0];
+            var pic_src = URL.createObjectURL(file);
+            open_change('ocr_sync_cont');
+            ocr_lib(pic_src);
+        });
+
+        function ocr_click() {
+            open_change('ocr_cont');
+            document.getElementById("ocr_text_print").innerHTML = "";
+            if (window.innerWidth <= "1024") {
+                open_change('menu_cont');
+            }
+        };
+
+        function ocr_lib(file) {
+            var selectbox = document.form1.select_language;
+            // 値(数値)を取得
+            var lg = selectbox.selectedIndex;
+            var str = selectbox.options[lg].value;
+            Tesseract
+                // (読み込む画像, 言語) jpeg || png
+                .recognize(file, { lang: str}) //exp: jpn, eng
+                //.ImageLike('media', lang)  //* browser only img || video || canvas
+                .progress(function (p) {
+                    // 進歩状況の表示
+                    console.log('progress', p)
+                })
+                // 結果のコールバック
+                .then(function (result) {
+                    console.log(result["text"]);
+                    var tmp = result["text"].split(/[\n\s]/);
+                    document.getElementById("ocr_text_print").innerHTML = "";
+                    document.getElementById("ocr_input_box").innerHTML = "";
+                    for (var i = 0; i < tmp.length; ++i) {
+                        document.getElementById("ocr_text_print").innerHTML += "<div class='ocr_text' onclick='oib(`" + tmp[i] + "`)'>" + tmp[i] + "</div>";
+                        if (i == (tmp.length - 1)) { open_change('ocr_sync_cont'); camera.value="";};
+                    }
+                });
+
+        }
+
+        function oib(text) {
+            document.getElementById("ocr_input_box").innerHTML += text;
+        }
+
+        // ocr_input_box
+
+        function ocr_insert() {
+            var flag = document.getElementById("ocr_input_box").value;
+            if (flag) {
+                var data00 = document.getElementById("ocr_input_box").value;
+                var selectbox = document.form1.select_insert;
+                // 値(数値)を取得
+                var num = selectbox.selectedIndex;
+                // 値(数値)から値(value値)を取得
+                var str = selectbox.options[num].value;
+                document.getElementById("input_src0" + (num + 1)).value = data00;
+                document.getElementById("ocr_input_box").value = "";
+            } else {
+                alert("値を入力してください。");
+            }
+        }
+
     </script>
 </body>
 
@@ -434,4 +524,15 @@
 個別削除機能追加
 ローカルストレージの取得を関数化
 デザイン変更
+ -->
+
+<!-- 
+0521
+個別編集機能追加
+削除機能の一括化（クエリ、CSV）
+編集機能の一括化（クエリ、CSV）
+コロン対策
+アニメーション追加
+デザイン修正
+OCR機能追加
  -->
